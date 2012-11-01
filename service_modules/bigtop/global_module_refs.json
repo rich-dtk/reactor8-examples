@@ -1,0 +1,10 @@
+{
+  "component_modules": {
+    "bigtop_base": {
+      "namespace": "r8"
+    },
+    "hadoop": {
+      "namespace": "r8"
+    }
+  }
+}

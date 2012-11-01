@@ -1,0 +1,65 @@
+{
+  "node_bindings": {
+    "bigtop-zk-quorum-3-nodes/zk3": "rh5.7-64-micro",
+    "bigtop-zk-quorum-3-nodes/zk-client": "rh5.7-64-micro",
+    "bigtop-zk-quorum-3-nodes/zk1": "rh5.7-64-micro",
+    "bigtop-zk-quorum-3-nodes/zk2": "rh5.7-64-micro"
+  },
+  "assemblies": {
+    "bigtop-zk-quorum-3-nodes": {
+      "name": "zk-quorum-3-nodes",
+      "nodes": {
+        "zk-client": {
+          "components": [
+            "hadoop_zookeeper::client",
+            "bigtop_base"
+          ]
+        },
+        "zk1": {
+          "components": [
+            "hadoop_zookeeper::peer",
+            "hadoop_zookeeper::server",
+            "bigtop_base"
+          ]
+        },
+        "zk2": {
+          "components": [
+            "hadoop_zookeeper::peer",
+            "hadoop_zookeeper::server",
+            "bigtop_base"
+          ]
+        },
+        "zk3": {
+          "components": [
+            "hadoop_zookeeper::peer",
+            "hadoop_zookeeper::server",
+            "bigtop_base"
+          ]
+        }
+      },
+      "port_links": [
+        {
+          "zk1/hadoop_zookeeper::peer/zk_peer_conn": "zk3/hadoop_zookeeper::server/zk_peer_conn"
+        },
+        {
+          "zk1/hadoop_zookeeper::peer/zk_peer_conn": "zk2/hadoop_zookeeper::server/zk_peer_conn"
+        },
+        {
+          "zk3/hadoop_zookeeper::peer/zk_peer_conn": "zk2/hadoop_zookeeper::server/zk_peer_conn"
+        },
+        {
+          "zk2/hadoop_zookeeper::peer/zk_peer_conn": "zk3/hadoop_zookeeper::server/zk_peer_conn"
+        },
+        {
+          "zk3/hadoop_zookeeper::peer/zk_peer_conn": "zk1/hadoop_zookeeper::server/zk_peer_conn"
+        },
+        {
+          "zk2/hadoop_zookeeper::peer/zk_peer_conn": "zk1/hadoop_zookeeper::server/zk_peer_conn"
+        },
+        {
+          "zk-client/hadoop_zookeeper::client/zk_ensemble_conn": "zk3/hadoop_zookeeper::server/zk_ensemble_conn"
+        }
+      ]
+    }
+  }
+}

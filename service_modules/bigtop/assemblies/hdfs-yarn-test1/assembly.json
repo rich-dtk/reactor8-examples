@@ -1,0 +1,51 @@
+{
+  "node_bindings": {
+    "bigtop-hdfs-yarn-test1/client": "rh5.7-64-micro",
+    "bigtop-hdfs-yarn-test1/master": "rh5.7-64-small",
+    "bigtop-hdfs-yarn-test1/slave2": "rh5.7-64-small",
+    "bigtop-hdfs-yarn-test1/slave": "rh5.7-64-small"
+  },
+  "assemblies": {
+    "bigtop-hdfs-yarn-test1": {
+      "name": "hdfs-yarn-test1",
+      "nodes": {
+        "client": {
+          "components": [
+            "hadoop::client",
+            "bigtop_base"
+          ]
+        },
+        "slave": {
+          "components": [
+            "hadoop::datanode",
+            "bigtop_base"
+          ]
+        },
+        "master": {
+          "components": [
+            "hadoop::namenode",
+            "hadoop::resourcemanager",
+            "bigtop_base"
+          ]
+        },
+        "slave2": {
+          "components": [
+            "hadoop::datanode",
+            "bigtop_base"
+          ]
+        }
+      },
+      "port_links": [
+        {
+          "slave2/hadoop::datanode/namenode_conn": "master/hadoop::namenode/namenode_conn"
+        },
+        {
+          "slave/hadoop::datanode/namenode_conn": "master/hadoop::namenode/namenode_conn"
+        },
+        {
+          "client/hadoop::client/namenode_conn": "master/hadoop::namenode/namenode_conn"
+        }
+      ]
+    }
+  }
+}

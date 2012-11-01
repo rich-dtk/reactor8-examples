@@ -1,0 +1,21 @@
+{
+  "node_bindings": {
+    "bigtop-hdfs-slave/slave": "rh5.7-64-small"
+  },
+  "assemblies": {
+    "bigtop-hdfs-slave": {
+      "name": "hdfs-slave",
+      "nodes": {
+        "slave": {
+          "components": [
+            "hadoop::datanode",
+            "bigtop_base"
+          ]
+        }
+      },
+      "port_links": [
+
+      ]
+    }
+  }
+}

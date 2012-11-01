@@ -1,0 +1,40 @@
+{
+  "node_bindings": {
+    "bigtop-hdfs-simple/client": "rh5.7-64-micro",
+    "bigtop-hdfs-simple/master": "rh5.7-64-small",
+    "bigtop-hdfs-simple/slave": "rh5.7-64-small"
+  },
+  "assemblies": {
+    "bigtop-hdfs-simple": {
+      "name": "hdfs-simple",
+      "nodes": {
+        "client": {
+          "components": [
+            "hadoop::client",
+            "bigtop_base"
+          ]
+        },
+        "master": {
+          "components": [
+            "hadoop::namenode",
+            "bigtop_base"
+          ]
+        },
+        "slave": {
+          "components": [
+            "hadoop::datanode",
+            "bigtop_base"
+          ]
+        }
+      },
+      "port_links": [
+        {
+          "slave/hadoop::datanode/namenode_conn": "master/hadoop::namenode/namenode_conn"
+        },
+        {
+          "client/hadoop::client/namenode_conn": "master/hadoop::namenode/namenode_conn"
+        }
+      ]
+    }
+  }
+}

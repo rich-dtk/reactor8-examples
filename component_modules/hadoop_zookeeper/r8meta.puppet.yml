@@ -1,0 +1,119 @@
+--- 
+  hadoop_zookeeper__server: 
+    display_name: hadoop_zookeeper__server
+    external_ref: 
+      class_name: hadoop_zookeeper::server
+      type: puppet_class
+    basic_type: service
+    component_type: hadoop_zookeeper__server
+    attribute: 
+      myid: 
+        display_name: myid
+        data_type: string
+        required: true
+        external_ref: 
+          type: puppet_attribute
+          path: "node[hadoop_zookeeper][myid]"
+      ensemble: 
+        display_name: ensemble
+        data_type: json
+        dynamic: true
+        external_ref: 
+          type: puppet_attribute
+          path: "node[hadoop_zookeeper][ensemble]"
+      kerberos_realm: 
+        display_name: kerberos_realm
+        data_type: string
+        value_asserted: ""
+        external_ref: 
+          type: puppet_attribute
+          path: "node[hadoop_zookeeper][kerberos_realm]"
+    component_order:
+      hadoop_zookeeper__peer:
+        after: hadoop_zookeeper__peer
+    dependency:
+      bigtop_base:
+        type: component
+        search_pattern:
+          ":filter":
+            - ":eq"
+            - ":component_type"
+            - bigtop_base
+        display_name: bigtop_base
+        description: bigtop_base is required for hadoop_zookeeper__server
+        severity: warning
+  hadoop_zookeeper__peer: 
+    display_name: hadoop_zookeeper__peer
+    external_ref: 
+      class_name: hadoop_zookeeper::peer
+      type: puppet_class
+    basic_type: service
+    component_type: hadoop_zookeeper__peer
+    attribute: 
+      peer_addrs: 
+        display_name: peer_addrs
+        data_type: json
+        semantic_type_summary: "array(string)"
+        semantic_type:
+          ":array": string
+        external_ref: 
+          type: puppet_attribute
+          path: "node[hadoop_zookeeper][peer_addrs]"
+      peer_ids: 
+        display_name: peer_ids
+        data_type: json
+        semantic_type_summary: "array(string)"
+        semantic_type:
+          ":array": string
+        external_ref: 
+          type: puppet_attribute
+          path: "node[hadoop_zookeeper][peer_ids]"
+    dependency:
+      bigtop_base:
+        type: component
+        search_pattern:
+          ":filter":
+            - ":eq"
+            - ":component_type"
+            - bigtop_base
+        display_name: bigtop_base
+        description: bigtop_base is required for hadoop_zookeeper__peer
+        severity: warning
+    external_link_defs:
+      - type: zk_peer_conn
+        possible_links:
+        - hadoop_zookeeper__server:
+            attribute_mappings:
+            - ":remote_node.host_addresses_ipv4.0": ":hadoop_zookeeper__peer.peer_addrs"
+            - ":hadoop_zookeeper__server.myid": ":hadoop_zookeeper__peer.peer_ids"
+  hadoop_zookeeper__client: 
+    display_name: hadoop_zookeeper__client
+    external_ref: 
+      class_name: hadoop_zookeeper::client
+      type: puppet_class
+    basic_type: service
+    component_type: hadoop_zookeeper__client
+    attribute: 
+      ensemble: 
+        display_name: ensemble
+        data_type: json
+        external_ref: 
+          type: puppet_attribute
+          path: "node[hadoop_zookeeper][ensemble]"
+    dependency:
+      bigtop_base:
+        type: component
+        search_pattern:
+          ":filter":
+            - ":eq"
+            - ":component_type"
+            - bigtop_base
+        display_name: bigtop_base
+        description: bigtop_base is required for hadoop_zookeeper__client
+        severity: warning
+    external_link_defs:
+      - type: zk_ensemble_conn
+        possible_links:
+        - hadoop_zookeeper__server:
+            attribute_mappings:
+            - ":hadoop_zookeeper__server.ensemble": ":hadoop_zookeeper__client.ensemble"
