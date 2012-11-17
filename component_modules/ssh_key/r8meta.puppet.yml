@@ -1,0 +1,59 @@
+--- 
+  ssh_key__export: 
+    display_name: ssh_key__export
+    external_ref: 
+      definition_name: ssh_key::export
+      type: puppet_definition
+    basic_type: service
+    component_type: ssh_key__export
+    only_one_per_node: false
+    attribute: 
+      name: 
+        display_name: name
+        description: Linux user name
+        data_type: string
+        required: true
+        external_ref: 
+          type: puppet_attribute
+          path: "node[ssh_key][name]"
+      ssh_pub_key: 
+        display_name: ssh_pub_key
+        data_type: string
+        dynamic: true
+        external_ref: 
+          type: puppet_attribute
+          path: "node[ssh_key][ssh_pub_key]"
+  ssh_key__import: 
+    display_name: ssh_key__import
+    external_ref: 
+      definition_name: ssh_key::import
+      type: puppet_definition
+    basic_type: service
+    component_type: ssh_key__import
+    only_one_per_node: false
+    attribute: 
+      name: 
+        display_name: name
+        data_type: string
+        required: true	
+        description: Linux user name
+        external_ref: 
+          type: puppet_attribute
+          path: "node[ssh_key][name]"
+      ssh_pub_keys: 
+        display_name: ssh_pub_keys
+        data_type: string
+        required: true	
+        external_ref: 
+          type: puppet_attribute
+          path: "node[ssh_key][ssh_pub_keys]"
+        semantic_type_summary: "array(string)"
+        semantic_type:
+          ":array": string
+    external_link_defs:
+      - type: shared_ssh_key
+        possible_links:
+        - ssh_key__export:
+            attribute_mappings:
+            - ":ssh_key__export.ssh_pub_key": ":ssh_key__import.ssh_pub_keys"
+        
